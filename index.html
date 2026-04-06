@@ -7,25 +7,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poiret+One&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg-start: #f0f7ff;
-        --bg-end: #ffffff;
-        --text: #0f172a;
-        --muted: #64748b;
+        --bg-a: #f0f7ff;
+        --bg-b: #ffffff;
+        --text: #142033;
+        --muted: #6b7280;
         --line: #e5e7eb;
+        --line-soft: rgba(148, 163, 184, 0.18);
         --blue: #1d4ed8;
-        --blue-dark: #1e3a8a;
+        --blue-deep: #1e3a8a;
         --indigo: #4f46e5;
         --purple: #9333ea;
-        --card: #ffffff;
+        --glass: rgba(255, 255, 255, 0.74);
+        --shadow: 0 18px 45px rgba(79, 70, 229, 0.08);
       }
 
       * {
         box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
       }
 
       body {
@@ -33,26 +39,29 @@
         min-height: 100vh;
         font-family: "Inter", system-ui, sans-serif;
         color: var(--text);
-        background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 30%),
+          linear-gradient(180deg, var(--bg-a) 0%, var(--bg-b) 100%);
       }
 
       .page {
-        width: min(1200px, calc(100% - 32px));
+        width: min(90vw, 1440px);
         margin: 0 auto;
-        padding: 40px 0 56px;
+        padding: 36px 0 64px;
       }
 
       .hero {
+        margin-bottom: 20px;
         text-align: center;
-        margin-bottom: 28px;
       }
 
       .hero h1 {
         margin: 0;
-        font-size: clamp(2.2rem, 5vw, 4.6rem);
+        font-family: "Poiret One", sans-serif;
+        font-size: clamp(2.6rem, 5vw, 5rem);
         line-height: 1.02;
-        letter-spacing: -0.04em;
-        font-weight: 800;
+        letter-spacing: 0.01em;
+        font-weight: 400;
         background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
         -webkit-background-clip: text;
         background-clip: text;
@@ -60,41 +69,45 @@
       }
 
       .hero p {
-        max-width: 760px;
-        margin: 16px auto 0;
+        max-width: 820px;
+        margin: 12px auto 0;
         color: var(--muted);
         font-size: 1rem;
-        line-height: 1.75;
+        line-height: 1.8;
       }
 
-      .controls {
-        max-width: 600px;
-        margin: 0 auto 36px;
+      .glass-card {
+        background: var(--glass);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        box-shadow: var(--shadow);
       }
 
-      .control-card {
-        background: rgba(255, 255, 255, 0.76);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        border-radius: 28px;
-        padding: 22px;
-        box-shadow: 0 20px 50px rgba(37, 99, 235, 0.08);
-        backdrop-filter: blur(12px);
+      .top-panel {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 22px;
+        padding: 24px;
+        border-radius: 30px;
+        margin-bottom: 28px;
+      }
+
+      .form-panel {
+        display: grid;
+        gap: 18px;
+        align-content: start;
       }
 
       .field {
         display: grid;
-        gap: 12px;
-      }
-
-      .field + .field {
-        margin-top: 18px;
+        gap: 10px;
       }
 
       .label {
         font-size: 0.92rem;
         font-weight: 600;
         color: #334155;
-        text-align: left;
       }
 
       .prompt {
@@ -103,12 +116,12 @@
         resize: vertical;
         border: 1px solid #dbeafe;
         border-radius: 22px;
-        background: #ffffff;
-        padding: 18px 18px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 18px;
         font: inherit;
         color: var(--text);
         outline: none;
-        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.08);
+        box-shadow: 0 10px 28px rgba(59, 130, 246, 0.08);
         transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
       }
 
@@ -117,84 +130,207 @@
         box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
       }
 
-      .period-switch {
+      .period-wrap {
         display: inline-grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
         width: 100%;
+        max-width: 320px;
       }
 
-      .period-option {
+      .period-btn {
         border: 1px solid #dbeafe;
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.92);
         color: #334155;
         border-radius: 999px;
-        padding: 14px 18px;
-        text-align: center;
-        font-size: 0.96rem;
-        font-weight: 600;
+        padding: 13px 16px;
+        font: inherit;
+        font-weight: 700;
         cursor: pointer;
         transition: all 180ms ease;
-        user-select: none;
       }
 
-      .period-option.active {
-        background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
-        border-color: #93c5fd;
+      .period-btn.active {
         color: #1d4ed8;
+        border-color: #93c5fd;
+        background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
         box-shadow: 0 8px 22px rgba(59, 130, 246, 0.12);
       }
 
       .generate-btn {
         width: 100%;
-        margin-top: 20px;
         border: 0;
         border-radius: 20px;
-        padding: 17px 22px;
+        padding: 18px 22px;
         font: inherit;
-        font-weight: 800;
         font-size: 1rem;
-        color: #ffffff;
+        font-weight: 800;
+        color: #fff;
         cursor: pointer;
-        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-        box-shadow: 0 18px 32px rgba(29, 78, 216, 0.22);
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+        box-shadow: 0 18px 34px rgba(29, 78, 216, 0.24);
         transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
       }
 
       .generate-btn:hover {
-        transform: translateY(-1px) scale(1.02);
-        box-shadow: 0 22px 38px rgba(29, 78, 216, 0.28);
-        filter: brightness(1.02);
+        transform: translateY(-1px) scale(1.015);
+        box-shadow: 0 24px 40px rgba(29, 78, 216, 0.3);
+        filter: brightness(1.03);
       }
 
-      .generate-btn:active {
-        transform: translateY(0) scale(0.995);
+      .cat-panel {
+        display: grid;
+        place-items: center;
+        min-height: 100%;
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.9), transparent 60%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.4) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        position: relative;
       }
 
-      .summary {
+      .cat-wrap {
+        width: min(86%, 320px);
+        height: 80%;
+        display: grid;
+        place-items: center;
+      }
+
+      .cat-svg {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+
+      .calendar-shell {
+        border-radius: 30px;
+        padding: 24px;
+      }
+
+      .calendar-head {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 18px;
-      }
-
-      .summary h2 {
-        margin: 0;
-        font-size: 1.15rem;
-      }
-
-      .summary p {
-        margin: 4px 0 0;
-        color: var(--muted);
-        font-size: 0.94rem;
-      }
-
-      .legend {
-        display: flex;
+        align-items: flex-end;
+        gap: 16px;
         flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .calendar-head h2 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .calendar-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .legend-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .filter-dot {
+        display: inline-flex;
+        align-items: center;
         gap: 8px;
+        border: 1px solid transparent;
+        background: rgba(255, 255, 255, 0.72);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font: inherit;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #334155;
+        cursor: pointer;
+        transition: all 160ms ease;
+      }
+
+      .filter-dot:hover {
+        transform: translateY(-1px);
+      }
+
+      .filter-dot.active {
+        border-color: #bfdbfe;
+        box-shadow: 0 8px 18px rgba(59, 130, 246, 0.12);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+      }
+
+      .dot-low {
+        background: #22c55e;
+      }
+
+      .dot-mid {
+        background: #f97316;
+      }
+
+      .dot-high {
+        background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+      }
+
+      .calendar-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .day-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+        transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+      }
+
+      .day-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+      }
+
+      .day-card.dimmed {
+        opacity: 0.2;
+      }
+
+      .day-card.highlight {
+        opacity: 1;
+        box-shadow: 0 18px 40px rgba(79, 70, 229, 0.12);
+        border-color: #c7d2fe;
+      }
+
+      .day-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .day-number {
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .day-date {
+        margin-top: 6px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #111827;
       }
 
       .pill {
@@ -202,8 +338,9 @@
         align-items: center;
         border-radius: 999px;
         padding: 8px 12px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        font-size: 0.78rem;
+        font-weight: 800;
+        white-space: nowrap;
       }
 
       .pill-low {
@@ -217,50 +354,8 @@
       }
 
       .pill-high {
-        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-        color: #ffffff;
-      }
-
-      .calendar-grid {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-
-      .day-card {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        padding: 20px;
-        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
-        transition: transform 180ms ease, box-shadow 180ms ease;
-      }
-
-      .day-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
-      }
-
-      .day-top {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 14px;
-      }
-
-      .day-number {
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: #94a3b8;
-      }
-
-      .day-date {
-        margin-top: 6px;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #0f172a;
+        background: linear-gradient(135deg, #8b5cf6 0%, #c026d3 100%);
+        color: #fff;
       }
 
       .meta-row {
@@ -270,27 +365,25 @@
         margin-top: 14px;
       }
 
-      .type-chip {
+      .type-chip,
+      .tag-chip {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 8px 12px;
         border-radius: 999px;
-        background: #f8fafc;
-        color: #334155;
+        padding: 8px 12px;
         font-size: 0.82rem;
         font-weight: 700;
       }
 
+      .type-chip {
+        background: #f8fafc;
+        color: #334155;
+      }
+
       .tag-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 12px;
-        border-radius: 999px;
         background: #eff6ff;
         color: #2563eb;
-        font-size: 0.82rem;
-        font-weight: 700;
       }
 
       .section {
@@ -318,10 +411,6 @@
         border: 1px solid #e0ecff;
       }
 
-      .hotspot-box .section-title {
-        color: #334155;
-      }
-
       @media (min-width: 768px) {
         .calendar-grid.week {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -342,10 +431,21 @@
         }
       }
 
+      @media (max-width: 980px) {
+        .top-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .cat-panel {
+          min-height: 260px;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
         *::after {
+          animation: none !important;
           transition: none !important;
         }
       }
@@ -355,45 +455,110 @@
     <main class="page">
       <section class="hero">
         <h1>社交媒体内容日历生成器</h1>
-        <p>输入一段账号定位描述，选择 1 周或 1 个月周期，系统会自动生成包含主题、方向、热点和执行难度的内容日历。</p>
+        <p>输入账号定位，选择 1 周或 1 个月周期，自动生成包含主题、方向、热点和执行难度的内容日历。</p>
       </section>
 
-      <section class="controls">
-        <div class="control-card">
-          <form id="calendarForm">
-            <div class="field">
-              <label class="label" for="positioning">账号定位</label>
-              <textarea
-                id="positioning"
-                name="positioning"
-                class="prompt"
-                placeholder="描述您的领域、受众与风格..."
-              ></textarea>
-            </div>
+      <section class="top-panel glass-card">
+        <div class="form-panel">
+          <div class="field">
+            <label class="label" for="positioning">账号定位</label>
+            <textarea
+              id="positioning"
+              class="prompt"
+              placeholder="描述您的领域、受众与风格..."
+            ></textarea>
+          </div>
 
-            <div class="field">
-              <div class="label">计划周期</div>
-              <div class="period-switch" id="periodSwitch">
-                <button type="button" class="period-option active" data-period="week">1周</button>
-                <button type="button" class="period-option" data-period="month">1个月</button>
-              </div>
+          <div class="field">
+            <div class="label">计划周期</div>
+            <div class="period-wrap">
+              <button type="button" class="period-btn active" data-period="week">1周</button>
+              <button type="button" class="period-btn" data-period="month">1个月</button>
             </div>
+          </div>
 
-            <button type="submit" class="generate-btn">生成日历</button>
-          </form>
+          <button id="generateBtn" class="generate-btn" type="button">生成日历</button>
+        </div>
+
+        <div class="cat-panel">
+          <div class="cat-wrap">
+            <svg class="cat-svg" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Animated cat">
+              <defs>
+                <linearGradient id="catGlow" x1="60" y1="40" x2="220" y2="240" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#C7D2FE" />
+                  <stop offset="1" stop-color="#E9D5FF" />
+                </linearGradient>
+                <filter id="softShadow" x="0" y="0" width="280" height="280" filterUnits="userSpaceOnUse">
+                  <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#A5B4FC" flood-opacity="0.25" />
+                </filter>
+              </defs>
+
+              <ellipse cx="140" cy="235" rx="78" ry="18" fill="#DCEBFF" opacity="0.75">
+                <animate attributeName="rx" values="78;82;78" dur="3.4s" repeatCount="indefinite" />
+              </ellipse>
+
+              <g filter="url(#softShadow)">
+                <g>
+                  <animateTransform
+                    attributeName="transform"
+                    type="translate"
+                    values="0 0; 0 -4; 0 0"
+                    dur="3.4s"
+                    repeatCount="indefinite"
+                  />
+                  <path d="M85 105L112 56L133 107" fill="url(#catGlow)" stroke="#94A3B8" stroke-width="2.2" />
+                  <path d="M195 105L168 56L147 107" fill="url(#catGlow)" stroke="#94A3B8" stroke-width="2.2" />
+                  <path d="M70 130C70 92 101 68 140 68C179 68 210 92 210 130V155C210 197 178 225 140 225C102 225 70 197 70 155V130Z" fill="white" stroke="#CBD5E1" stroke-width="2.2" />
+                  <ellipse cx="110" cy="145" rx="12" ry="8" fill="#EEF2FF" />
+                  <ellipse cx="170" cy="145" rx="12" ry="8" fill="#EEF2FF" />
+
+                  <g>
+                    <ellipse cx="112" cy="146" rx="5.5" ry="7.5" fill="#111827">
+                      <animate attributeName="ry" values="7.5;1;7.5" dur="4.2s" repeatCount="indefinite" />
+                    </ellipse>
+                    <ellipse cx="168" cy="146" rx="5.5" ry="7.5" fill="#111827">
+                      <animate attributeName="ry" values="7.5;1;7.5" dur="4.2s" repeatCount="indefinite" />
+                    </ellipse>
+                  </g>
+
+                  <path d="M140 156L132 166H148L140 156Z" fill="#F9A8D4" />
+                  <path d="M129 173C132 180 138 184 140 184C142 184 148 180 151 173" stroke="#F472B6" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M102 165H76" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+                  <path d="M103 173H72" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+                  <path d="M178 165H204" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+                  <path d="M177 173H208" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+
+                  <path d="M101 212C108 193 126 181 140 181C154 181 172 193 179 212" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2.2" />
+
+                  <path d="M106 214C99 232 100 244 113 248" stroke="#CBD5E1" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M174 214C181 232 180 244 167 248" stroke="#CBD5E1" stroke-width="2.2" stroke-linecap="round" />
+                </g>
+              </g>
+            </svg>
+          </div>
         </div>
       </section>
 
-      <section>
-        <div class="summary">
+      <section class="calendar-shell glass-card">
+        <div class="calendar-head">
           <div>
             <h2>日历视图</h2>
             <p id="calendarSummary">输入账号定位后点击生成，查看完整内容日历。</p>
           </div>
-          <div class="legend">
-            <span class="pill pill-low">低难度</span>
-            <span class="pill pill-mid">中难度</span>
-            <span class="pill pill-high">高难度</span>
+
+          <div class="legend-bar">
+            <button class="filter-dot" data-filter="低">
+              <span class="dot dot-low"></span>
+              <span>低难度</span>
+            </button>
+            <button class="filter-dot" data-filter="中">
+              <span class="dot dot-mid"></span>
+              <span>中难度</span>
+            </button>
+            <button class="filter-dot" data-filter="高">
+              <span class="dot dot-high"></span>
+              <span>高难度</span>
+            </button>
           </div>
         </div>
 
@@ -402,13 +567,15 @@
     </main>
 
     <script>
-      const form = document.getElementById("calendarForm");
       const positioningInput = document.getElementById("positioning");
-      const periodSwitch = document.getElementById("periodSwitch");
+      const generateBtn = document.getElementById("generateBtn");
+      const periodButtons = Array.from(document.querySelectorAll(".period-btn"));
+      const filterButtons = Array.from(document.querySelectorAll(".filter-dot"));
       const calendarGrid = document.getElementById("calendarGrid");
       const calendarSummary = document.getElementById("calendarSummary");
 
       let selectedPeriod = "week";
+      let activeDifficultyFilter = null;
 
       const contentTypes = [
         { name: "干货", emoji: "📘" },
@@ -434,12 +601,6 @@
           "节点借势热点：适合结合节日、换季或平台活动。",
           "月末总结热点：适合复盘、收获与下月预告。"
         ]
-      };
-
-      const difficultyClassMap = {
-        低: "pill pill-low",
-        中: "pill pill-mid",
-        高: "pill pill-high"
       };
 
       function getTotalDays(period) {
@@ -552,6 +713,12 @@
         return items;
       }
 
+      function difficultyPill(difficulty) {
+        if (difficulty === "低") return `<span class="pill pill-low">低难度</span>`;
+        if (difficulty === "中") return `<span class="pill pill-mid">中难度</span>`;
+        return `<span class="pill pill-high">高难度</span>`;
+      }
+
       function renderPlan(plan, period) {
         const { domain, audience, style } = plan[0].profile;
         calendarSummary.textContent = `${domain} | 面向 ${audience} | ${period === "month" ? "1个月" : "1周"}计划 | 风格：${style}`;
@@ -560,13 +727,13 @@
         calendarGrid.innerHTML = plan
           .map(
             (item) => `
-              <article class="day-card">
+              <article class="day-card" data-difficulty="${item.difficulty}">
                 <div class="day-top">
                   <div>
                     <div class="day-number">Day ${item.dayNumber}</div>
                     <div class="day-date">${item.label}</div>
                   </div>
-                  <span class="${difficultyClassMap[item.difficulty]}">${item.difficulty}难度</span>
+                  ${difficultyPill(item.difficulty)}
                 </div>
 
                 <div class="meta-row">
@@ -592,20 +759,43 @@
             `
           )
           .join("");
+
+        applyDifficultyFilter();
       }
 
-      periodSwitch.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-period]");
-        if (!button) return;
+      function applyDifficultyFilter() {
+        const cards = Array.from(calendarGrid.querySelectorAll(".day-card"));
+        cards.forEach((card) => {
+          card.classList.remove("dimmed", "highlight");
+          if (!activeDifficultyFilter) return;
+          if (card.dataset.difficulty === activeDifficultyFilter) {
+            card.classList.add("highlight");
+          } else {
+            card.classList.add("dimmed");
+          }
+        });
 
-        selectedPeriod = button.dataset.period;
-        periodSwitch.querySelectorAll(".period-option").forEach((item) => {
-          item.classList.toggle("active", item === button);
+        filterButtons.forEach((button) => {
+          button.classList.toggle("active", button.dataset.filter === activeDifficultyFilter);
+        });
+      }
+
+      periodButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedPeriod = button.dataset.period;
+          periodButtons.forEach((item) => item.classList.toggle("active", item === button));
         });
       });
 
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.filter;
+          activeDifficultyFilter = activeDifficultyFilter === value ? null : value;
+          applyDifficultyFilter();
+        });
+      });
+
+      generateBtn.addEventListener("click", () => {
         const plan = buildPlan(positioningInput.value, selectedPeriod);
         renderPlan(plan, selectedPeriod);
       });
