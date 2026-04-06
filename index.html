@@ -9,31 +9,11 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-              notion: {
-                bg: "#f7f7f5",
-                card: "#ffffff",
-                line: "#e7e5e4",
-                ink: "#191919",
-                muted: "#6b7280",
-                soft: "#f1f1ef"
-              }
-            },
             boxShadow: {
-              notion: "0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 30px rgba(15, 23, 42, 0.06)"
+              glass: "0 10px 30px rgba(72, 114, 184, 0.10)"
             },
-            borderRadius: {
-              notion: "18px"
-            },
-            fontFamily: {
-              sans: [
-                "ui-sans-serif",
-                "system-ui",
-                "-apple-system",
-                "BlinkMacSystemFont",
-                "\"Segoe UI\"",
-                "sans-serif"
-              ]
+            colors: {
+              ink: "#142033"
             }
           }
         }
@@ -42,20 +22,21 @@
     <style>
       body {
         background:
-          radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
-          linear-gradient(180deg, #fafaf9 0%, #f7f7f5 100%);
+          radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 28%),
+          linear-gradient(180deg, #f5faff 0%, #eef5ff 52%, #eaf2ff 100%);
+      }
+
+      .glass {
+        background: rgba(255, 255, 255, 0.62);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.65);
+        box-shadow: 0 10px 30px rgba(72, 114, 184, 0.10);
       }
 
       .calendar-grid {
         display: grid;
         gap: 1rem;
-      }
-
-      .calendar-grid.week {
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-
-      .calendar-grid.month {
         grid-template-columns: repeat(1, minmax(0, 1fr));
       }
 
@@ -80,159 +61,148 @@
       }
     </style>
   </head>
-  <body class="min-h-screen font-sans text-notion-ink antialiased">
+  <body class="min-h-screen text-ink antialiased">
     <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <section class="mb-6 rounded-[28px] border border-notion-line bg-white/90 p-5 shadow-notion sm:p-8">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div class="max-w-3xl">
-            <div class="inline-flex items-center rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium tracking-wide text-stone-600">
-              Notion Style Single File App
+      <section class="glass rounded-[28px] p-6 sm:p-8">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-3xl">
+              <span class="inline-flex rounded-full border border-white/70 bg-white/60 px-3 py-1 text-xs font-medium text-slate-600">
+                Light Tech Calendar Generator
+              </span>
+              <h1 class="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                社交媒体内容日历生成器
+              </h1>
+              <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                输入账号定位与周期，自动生成轻量清晰的内容日历，包含发布主题、内容方向、通用热点和执行难度标记。
+              </p>
             </div>
-            <h1 class="mt-4 text-3xl font-semibold tracking-tight text-stone-900 sm:text-5xl">
-              社交媒体内容日历生成器
-            </h1>
-            <p class="mt-4 max-w-2xl text-sm leading-7 text-notion-muted sm:text-base">
-              输入账号定位与周期，自动生成一份简洁清晰的内容日历。每一天都会给出发布主题、内容方向、内容类型、通用热点切入点，以及可执行难度标记。
-            </p>
+
+            <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[360px]">
+              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+                <div class="text-xs text-slate-500">内容类型</div>
+                <div class="mt-2 text-2xl font-semibold" id="statTypes">4</div>
+              </div>
+              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+                <div class="text-xs text-slate-500">计划天数</div>
+                <div class="mt-2 text-2xl font-semibold" id="statDays">7</div>
+              </div>
+              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+                <div class="text-xs text-slate-500">热点关联</div>
+                <div class="mt-2 text-2xl font-semibold">Auto</div>
+              </div>
+            </div>
           </div>
 
-          <div class="grid gap-3 sm:grid-cols-3 lg:w-[380px]">
-            <div class="rounded-notion border border-notion-line bg-notion-soft p-4">
-              <div class="text-xs text-notion-muted">内容类型</div>
-              <div class="mt-2 text-2xl font-semibold" id="statTypes">4</div>
-            </div>
-            <div class="rounded-notion border border-notion-line bg-notion-soft p-4">
-              <div class="text-xs text-notion-muted">计划天数</div>
-              <div class="mt-2 text-2xl font-semibold" id="statDays">7</div>
-            </div>
-            <div class="rounded-notion border border-notion-line bg-notion-soft p-4">
-              <div class="text-xs text-notion-muted">热点关联</div>
-              <div class="mt-2 text-2xl font-semibold">Auto</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-        <aside class="rounded-[28px] border border-notion-line bg-white/90 p-5 shadow-notion sm:p-6">
-          <div class="mb-5 flex items-center justify-between">
+          <form id="calendarForm" class="grid gap-4 xl:grid-cols-[1.1fr_1.1fr_1.1fr_0.9fr_auto_auto]">
             <div>
-              <h2 class="text-lg font-semibold text-stone-900">输入配置</h2>
-              <p class="mt-1 text-sm text-notion-muted">定义账号定位与内容周期</p>
-            </div>
-            <button
-              id="fillDemoBtn"
-              type="button"
-              class="rounded-xl border border-notion-line bg-stone-50 px-3 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-100"
-            >
-              示例数据
-            </button>
-          </div>
-
-          <form id="calendarForm" class="space-y-4">
-            <div>
-              <label for="domain" class="mb-2 block text-sm font-medium text-stone-800">账号领域</label>
+              <label for="domain" class="mb-2 block text-sm font-medium text-slate-700">账号领域</label>
               <input
                 id="domain"
                 name="domain"
                 type="text"
-                placeholder="例如：AI 工具、自媒体运营、健身饮食"
-                class="w-full rounded-2xl border border-notion-line bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-300 focus:ring-4 focus:ring-stone-100"
+                placeholder="例如：AI 工具、自媒体运营、精致露营"
+                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none ring-0 placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
               />
             </div>
 
             <div>
-              <label for="audience" class="mb-2 block text-sm font-medium text-stone-800">目标受众</label>
+              <label for="audience" class="mb-2 block text-sm font-medium text-slate-700">目标受众</label>
               <input
                 id="audience"
                 name="audience"
                 type="text"
-                placeholder="例如：副业新手、品牌主理人、职场白领"
-                class="w-full rounded-2xl border border-notion-line bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-300 focus:ring-4 focus:ring-stone-100"
+                placeholder="例如：副业人群、品牌主理人、城市青年"
+                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
               />
             </div>
 
             <div>
-              <label for="style" class="mb-2 block text-sm font-medium text-stone-800">内容风格</label>
+              <label for="style" class="mb-2 block text-sm font-medium text-slate-700">内容风格</label>
               <input
                 id="style"
                 name="style"
                 type="text"
-                placeholder="例如：专业克制、亲切实用、轻松故事感"
-                class="w-full rounded-2xl border border-notion-line bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-300 focus:ring-4 focus:ring-stone-100"
+                placeholder="例如：清晰专业、轻松故事感、温柔审美"
+                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
               />
             </div>
 
             <div>
-              <label for="period" class="mb-2 block text-sm font-medium text-stone-800">生成周期</label>
-              <div class="grid grid-cols-2 gap-3">
-                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-notion-line bg-stone-50 px-4 py-3 text-sm transition hover:bg-stone-100">
-                  <input checked id="periodWeek" name="period" type="radio" value="week" class="h-4 w-4 accent-stone-900" />
-                  <span>1 周</span>
+              <label for="period" class="mb-2 block text-sm font-medium text-slate-700">生成周期</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center justify-center rounded-2xl border border-white/70 bg-white/60 px-3 py-3 text-sm text-slate-700">
+                  <input checked name="period" type="radio" value="week" class="mr-2 accent-sky-600" />
+                  1 周
                 </label>
-                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-notion-line bg-stone-50 px-4 py-3 text-sm transition hover:bg-stone-100">
-                  <input id="periodMonth" name="period" type="radio" value="month" class="h-4 w-4 accent-stone-900" />
-                  <span>1 月</span>
+                <label class="flex items-center justify-center rounded-2xl border border-white/70 bg-white/60 px-3 py-3 text-sm text-slate-700">
+                  <input name="period" type="radio" value="month" class="mr-2 accent-sky-600" />
+                  1 月
                 </label>
               </div>
             </div>
 
-            <div class="rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-4">
-              <div class="text-sm font-medium text-stone-800">生成规则</div>
-              <ul class="mt-3 space-y-2 text-sm leading-6 text-notion-muted">
-                <li>自动轮换干货、互动、故事、热点四种内容类型</li>
-                <li>结合周初、周中、周末、月初、月末等通用热点场景</li>
-                <li>为每条内容打上低、中、高三档执行难度</li>
-              </ul>
+            <div class="flex items-end">
+              <button
+                id="fillDemoBtn"
+                type="button"
+                class="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-3 text-sm font-medium text-white transition duration-200 hover:scale-[1.03] hover:shadow-lg"
+              >
+                示例数据
+              </button>
             </div>
 
-            <button
-              id="generateBtn"
-              type="submit"
-              class="w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-stone-800"
-            >
-              生成内容日历
-            </button>
+            <div class="flex items-end">
+              <button
+                id="generateBtn"
+                type="submit"
+                class="w-full rounded-2xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 px-5 py-3 text-sm font-medium text-white transition duration-200 hover:scale-[1.03] hover:shadow-lg"
+              >
+                生成内容日历
+              </button>
+            </div>
           </form>
-        </aside>
+        </div>
+      </section>
 
-        <section class="rounded-[28px] border border-notion-line bg-white/90 p-5 shadow-notion sm:p-6">
-          <div class="flex flex-col gap-4 border-b border-notion-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <section class="mt-6">
+        <div class="glass rounded-[28px] p-5 sm:p-6">
+          <div class="flex flex-col gap-4 border-b border-white/60 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 class="text-lg font-semibold text-stone-900">日历视图</h2>
-              <p id="calendarSummary" class="mt-1 text-sm text-notion-muted">
-                先填写左侧信息，再生成一份完整的内容计划。
+              <h2 class="text-xl font-semibold text-slate-900">日历视图</h2>
+              <p id="calendarSummary" class="mt-1 text-sm text-slate-600">
+                先填写顶部信息，再生成一份完整的内容计划。
               </p>
             </div>
 
             <div class="flex flex-wrap gap-2 text-xs">
-              <span class="rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-700">低难度</span>
-              <span class="rounded-full bg-amber-50 px-3 py-1 font-medium text-amber-700">中难度</span>
-              <span class="rounded-full bg-rose-50 px-3 py-1 font-medium text-rose-700">高难度</span>
+              <span class="rounded-full bg-emerald-100 px-3 py-1 font-medium text-emerald-700">低难度</span>
+              <span class="rounded-full bg-orange-100 px-3 py-1 font-medium text-orange-700">中难度</span>
+              <span class="rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-3 py-1 font-medium text-white">高难度</span>
             </div>
           </div>
 
-          <div class="mt-6 grid gap-4 sm:grid-cols-4">
-            <div class="rounded-2xl border border-notion-line bg-stone-50 p-4">
-              <div class="text-xs text-notion-muted">干货</div>
+          <div class="mt-5 grid gap-4 sm:grid-cols-4">
+            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+              <div class="text-xs text-slate-500">📘 干货</div>
               <div class="mt-2 text-2xl font-semibold" id="countDry">0</div>
             </div>
-            <div class="rounded-2xl border border-notion-line bg-stone-50 p-4">
-              <div class="text-xs text-notion-muted">互动</div>
+            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+              <div class="text-xs text-slate-500">💬 互动</div>
               <div class="mt-2 text-2xl font-semibold" id="countInteractive">0</div>
             </div>
-            <div class="rounded-2xl border border-notion-line bg-stone-50 p-4">
-              <div class="text-xs text-notion-muted">故事</div>
+            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+              <div class="text-xs text-slate-500">📖 故事</div>
               <div class="mt-2 text-2xl font-semibold" id="countStory">0</div>
             </div>
-            <div class="rounded-2xl border border-notion-line bg-stone-50 p-4">
-              <div class="text-xs text-notion-muted">热点</div>
+            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
+              <div class="text-xs text-slate-500">⚡ 热点</div>
               <div class="mt-2 text-2xl font-semibold" id="countTrend">0</div>
             </div>
           </div>
 
           <div id="calendarGrid" class="calendar-grid week mt-6"></div>
-        </section>
+        </div>
       </section>
     </main>
 
@@ -244,30 +214,36 @@
         period: "week"
       };
 
-      const contentTypes = ["干货", "互动", "故事", "热点"];
+      const contentTypes = [
+        { name: "干货", emoji: "📘" },
+        { name: "互动", emoji: "💬" },
+        { name: "故事", emoji: "📖" },
+        { name: "热点", emoji: "⚡" }
+      ];
+
       const weekdayNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
       const hotspots = {
         week: [
-          "周初规划热点：用“本周先做什么”切入，天然适合清单和目标型内容。",
-          "工作流优化热点：结合周中效率焦虑，适合发布技巧、模板或避坑建议。",
-          "评论区征集热点：周中适合收集问题，为后续内容做互动铺垫。",
-          "案例复盘热点：临近周末，用户更愿意看真实经验和结果展示。",
-          "周末轻互动热点：适合投票、问答、观点站队、经验分享。 "
+          "周初规划热点：适合用清单、目标拆解或行动建议切入。",
+          "周中效率热点：适合分享技巧、模板和避坑经验。",
+          "评论征集热点：适合发起问题，沉淀用户真实需求。",
+          "案例复盘热点：适合展示结果、经验和转变过程。",
+          "周末轻互动热点：适合投票、问答和轻松分享。"
         ],
         month: [
-          "月初规划热点：适合发布目标拆解、计划表、执行路线图。",
-          "阶段复盘热点：月中可结合半月进展做问题诊断或案例分析。",
-          "趋势观察热点：适合连接行业变化、平台动向、用户新需求。",
-          "节日借势热点：可用通用节日、换季、开学、年中等场景包装内容。",
-          "月末总结热点：适合做复盘、收获、失败经验和下月预告。"
+          "月初规划热点：适合目标制定、路线图和计划模板。",
+          "月中复盘热点：适合诊断问题、总结阶段成果。",
+          "趋势观察热点：适合连接行业变化和用户新需求。",
+          "节点借势热点：适合结合换季、假期、节日等场景。",
+          "月末总结热点：适合复盘、收获和下月预告。"
         ]
       };
 
       const difficultyMap = {
-        低: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200",
-        中: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
-        高: "bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-200"
+        低: "bg-emerald-100 text-emerald-700",
+        中: "bg-orange-100 text-orange-700",
+        高: "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white"
       };
 
       const form = document.getElementById("calendarForm");
@@ -276,12 +252,12 @@
       const calendarSummary = document.getElementById("calendarSummary");
 
       function getFormState() {
-        const formData = new FormData(form);
+        const data = new FormData(form);
         return {
-          domain: (formData.get("domain") || "").toString().trim() || "通用内容赛道",
-          audience: (formData.get("audience") || "").toString().trim() || "泛兴趣用户",
-          style: (formData.get("style") || "").toString().trim() || "清晰、可信、易执行",
-          period: (formData.get("period") || "week").toString()
+          domain: (data.get("domain") || "").toString().trim() || "通用内容赛道",
+          audience: (data.get("audience") || "").toString().trim() || "泛兴趣用户",
+          style: (data.get("style") || "").toString().trim() || "清晰、可信、易执行",
+          period: (data.get("period") || "week").toString()
         };
       }
 
@@ -315,12 +291,12 @@
           互动: [
             `围绕${domain}发起选择题，了解${audience}最在意的挑战`,
             `做一条评论区征集帖，邀请${audience}说出真实困惑`,
-            `设计一个二选一观点互动，测试${audience}偏好的内容方向`
+            `设计一个二选一互动，测试${audience}偏好的内容方向`
           ],
           故事: [
             `讲一个与你的${domain}相关的真实经历，建立可信度`,
             `分享一次从混乱到有序的转变过程，强化品牌故事感`,
-            `讲述一个用户或客户在${domain}上的进步案例`
+            `讲述一个用户在${domain}上的进步案例`
           ],
           热点: [
             `把近期常见讨论点映射到${domain}，给${audience}一个实用判断框架`,
@@ -328,7 +304,6 @@
             `结合平台趋势变化，提醒${audience}哪些机会正在出现`
           ]
         };
-
         const choices = topicMap[type];
         return choices[index % choices.length];
       }
@@ -336,11 +311,10 @@
       function getDirection(type, style, domain, audience) {
         const directionMap = {
           干货: `用${style}的表达方式，给出明确步骤、模板或方法，避免空泛结论。`,
-          互动: `语气保持${style}，设置低门槛提问，让${audience}愿意评论、投票或分享经验。`,
-          故事: `以${style}的叙事口吻呈现过程、转折与结果，让${domain}更有人味。`,
+          互动: `语气保持${style}，设置低门槛提问，让${audience}更愿意评论、投票或分享经验。`,
+          故事: `以${style}的叙事口吻呈现过程、转折与结果，让${domain}内容更有人味。`,
           热点: `用${style}的视角快速解释热点与${domain}的关系，并指出对${audience}的实际价值。`
         };
-
         return directionMap[type];
       }
 
@@ -358,8 +332,8 @@
           const date = new Date(baseDate);
           date.setDate(baseDate.getDate() + i);
 
-          const type = contentTypes[i % contentTypes.length];
-          const difficulty = pickDifficulty(type, i, state.period);
+          const typeInfo = contentTypes[i % contentTypes.length];
+          const difficulty = pickDifficulty(typeInfo.name, i, state.period);
 
           items.push({
             dayNumber: i + 1,
@@ -367,10 +341,11 @@
               state.period === "month"
                 ? `${date.getMonth() + 1} 月 ${date.getDate()} 日`
                 : `${weekdayNames[date.getDay()]} · ${date.getMonth() + 1}/${date.getDate()}`,
-            type,
+            type: typeInfo.name,
+            emoji: typeInfo.emoji,
             difficulty,
-            title: getTopicTitle(type, state.domain, state.audience, i),
-            direction: getDirection(type, state.style, state.domain, state.audience),
+            title: getTopicTitle(typeInfo.name, state.domain, state.audience, i),
+            direction: getDirection(typeInfo.name, state.style, state.domain, state.audience),
             hotspot: getHotspot(state.period, i)
           });
         }
@@ -380,12 +355,11 @@
 
       function updateStats(plan, period) {
         document.getElementById("statDays").textContent = String(plan.length);
-        document.getElementById("countDry").textContent = String(plan.filter((item) => item.type === "干货").length);
-        document.getElementById("countInteractive").textContent = String(plan.filter((item) => item.type === "互动").length);
-        document.getElementById("countStory").textContent = String(plan.filter((item) => item.type === "故事").length);
-        document.getElementById("countTrend").textContent = String(plan.filter((item) => item.type === "热点").length);
         document.getElementById("statTypes").textContent = "4";
-
+        document.getElementById("countDry").textContent = String(plan.filter((i) => i.type === "干货").length);
+        document.getElementById("countInteractive").textContent = String(plan.filter((i) => i.type === "互动").length);
+        document.getElementById("countStory").textContent = String(plan.filter((i) => i.type === "故事").length);
+        document.getElementById("countTrend").textContent = String(plan.filter((i) => i.type === "热点").length);
         calendarGrid.className = `calendar-grid ${period === "month" ? "month" : "week"} mt-6`;
       }
 
@@ -393,43 +367,42 @@
         updateStats(plan, state.period);
         calendarSummary.textContent = `${state.domain} | 面向 ${state.audience} | ${state.period === "month" ? "1 月" : "1 周"}内容规划 | 风格：${state.style}`;
 
-        calendarGrid.innerHTML = plan
-          .map(
-            (item) => `
-              <article class="rounded-[22px] border border-notion-line bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-notion">
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <div class="text-xs font-medium uppercase tracking-wide text-notion-muted">Day ${item.dayNumber}</div>
-                    <h3 class="mt-1 text-base font-semibold text-stone-900">${item.label}</h3>
-                  </div>
-                  <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium ${difficultyMap[item.difficulty]}">
-                    ${item.difficulty}难度
-                  </span>
-                </div>
+        calendarGrid.innerHTML = plan.map((item) => `
+          <article class="glass rounded-[24px] p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">Day ${item.dayNumber}</div>
+                <h3 class="mt-1 text-lg font-semibold text-slate-900">${item.label}</h3>
+              </div>
+              <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium ${difficultyMap[item.difficulty]}">
+                ${item.difficulty}难度
+              </span>
+            </div>
 
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <span class="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-700">${item.type}</span>
-                  <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-700">已关联热点</span>
-                </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-slate-700">
+                <span>${item.emoji}</span>
+                <span>${item.type}</span>
+              </span>
+              <span class="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700">已关联热点</span>
+            </div>
 
-                <div class="mt-4">
-                  <div class="text-sm font-medium text-stone-900">发布主题</div>
-                  <p class="mt-2 text-sm leading-6 text-stone-700">${item.title}</p>
-                </div>
+            <div class="mt-5">
+              <div class="text-sm font-medium text-slate-900">发布主题</div>
+              <p class="mt-2 text-sm leading-7 text-slate-700">${item.title}</p>
+            </div>
 
-                <div class="mt-4">
-                  <div class="text-sm font-medium text-stone-900">内容方向</div>
-                  <p class="mt-2 text-sm leading-6 text-notion-muted">${item.direction}</p>
-                </div>
+            <div class="mt-4">
+              <div class="text-sm font-medium text-slate-900">内容方向</div>
+              <p class="mt-2 text-sm leading-7 text-slate-600">${item.direction}</p>
+            </div>
 
-                <div class="mt-4 rounded-2xl bg-stone-50 p-3">
-                  <div class="text-xs font-medium uppercase tracking-wide text-stone-500">通用热点切入</div>
-                  <p class="mt-2 text-sm leading-6 text-stone-700">${item.hotspot}</p>
-                </div>
-              </article>
-            `
-          )
-          .join("");
+            <div class="mt-4 rounded-2xl border border-white/70 bg-white/50 p-4">
+              <div class="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">通用热点切入</div>
+              <p class="mt-2 text-sm leading-7 text-slate-700">${item.hotspot}</p>
+            </div>
+          </article>
+        `).join("");
       }
 
       function generate() {
