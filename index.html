@@ -4,40 +4,322 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>社交媒体内容日历生成器</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            boxShadow: {
-              glass: "0 10px 30px rgba(72, 114, 184, 0.10)"
-            },
-            colors: {
-              ink: "#142033"
-            }
-          }
-        }
-      };
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background:
-          radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 28%),
-          linear-gradient(180deg, #f5faff 0%, #eef5ff 52%, #eaf2ff 100%);
+      :root {
+        --bg-start: #f0f7ff;
+        --bg-end: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --blue: #1d4ed8;
+        --blue-dark: #1e3a8a;
+        --indigo: #4f46e5;
+        --purple: #9333ea;
+        --card: #ffffff;
       }
 
-      .glass {
-        background: rgba(255, 255, 255, 0.62);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-        border: 1px solid rgba(255, 255, 255, 0.65);
-        box-shadow: 0 10px 30px rgba(72, 114, 184, 0.10);
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      }
+
+      .page {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 56px;
+      }
+
+      .hero {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 4.6rem);
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero p {
+        max-width: 760px;
+        margin: 16px auto 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.75;
+      }
+
+      .controls {
+        max-width: 600px;
+        margin: 0 auto 36px;
+      }
+
+      .control-card {
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 28px;
+        padding: 22px;
+        box-shadow: 0 20px 50px rgba(37, 99, 235, 0.08);
+        backdrop-filter: blur(12px);
+      }
+
+      .field {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field + .field {
+        margin-top: 18px;
+      }
+
+      .label {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #334155;
+        text-align: left;
+      }
+
+      .prompt {
+        width: 100%;
+        min-height: 132px;
+        resize: vertical;
+        border: 1px solid #dbeafe;
+        border-radius: 22px;
+        background: #ffffff;
+        padding: 18px 18px;
+        font: inherit;
+        color: var(--text);
+        outline: none;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.08);
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+
+      .prompt:focus {
+        border-color: #93c5fd;
+        box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+      }
+
+      .period-switch {
+        display: inline-grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+      }
+
+      .period-option {
+        border: 1px solid #dbeafe;
+        background: #ffffff;
+        color: #334155;
+        border-radius: 999px;
+        padding: 14px 18px;
+        text-align: center;
+        font-size: 0.96rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 180ms ease;
+        user-select: none;
+      }
+
+      .period-option.active {
+        background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+        border-color: #93c5fd;
+        color: #1d4ed8;
+        box-shadow: 0 8px 22px rgba(59, 130, 246, 0.12);
+      }
+
+      .generate-btn {
+        width: 100%;
+        margin-top: 20px;
+        border: 0;
+        border-radius: 20px;
+        padding: 17px 22px;
+        font: inherit;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #ffffff;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+        box-shadow: 0 18px 32px rgba(29, 78, 216, 0.22);
+        transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 22px 38px rgba(29, 78, 216, 0.28);
+        filter: brightness(1.02);
+      }
+
+      .generate-btn:active {
+        transform: translateY(0) scale(0.995);
+      }
+
+      .summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .summary h2 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .summary p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .pill-low {
+        background: #dcfce7;
+        color: #15803d;
+      }
+
+      .pill-mid {
+        background: #ffedd5;
+        color: #c2410c;
+      }
+
+      .pill-high {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+        color: #ffffff;
       }
 
       .calendar-grid {
         display: grid;
-        gap: 1rem;
+        gap: 16px;
         grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .day-card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      .day-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
+      }
+
+      .day-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .day-number {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .day-date {
+        margin-top: 6px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .type-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #f8fafc;
+        color: #334155;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .tag-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .section {
+        margin-top: 18px;
+      }
+
+      .section-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .section p {
+        margin: 8px 0 0;
+        color: #475569;
+        font-size: 0.94rem;
+        line-height: 1.8;
+      }
+
+      .hotspot-box {
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 18px;
+        background: #f8fbff;
+        border: 1px solid #e0ecff;
+      }
+
+      .hotspot-box .section-title {
+        color: #334155;
       }
 
       @media (min-width: 768px) {
@@ -50,7 +332,7 @@
         }
       }
 
-      @media (min-width: 1280px) {
+      @media (min-width: 1200px) {
         .calendar-grid.week {
           grid-template-columns: repeat(4, minmax(0, 1fr));
         }
@@ -59,160 +341,74 @@
           grid-template-columns: repeat(5, minmax(0, 1fr));
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+        }
+      }
     </style>
   </head>
-  <body class="min-h-screen text-ink antialiased">
-    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <section class="glass rounded-[28px] p-6 sm:p-8">
-        <div class="flex flex-col gap-6">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div class="max-w-3xl">
-              <span class="inline-flex rounded-full border border-white/70 bg-white/60 px-3 py-1 text-xs font-medium text-slate-600">
-                Light Tech Calendar Generator
-              </span>
-              <h1 class="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-                社交媒体内容日历生成器
-              </h1>
-              <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-                输入账号定位与周期，自动生成轻量清晰的内容日历，包含发布主题、内容方向、通用热点和执行难度标记。
-              </p>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <h1>社交媒体内容日历生成器</h1>
+        <p>输入一段账号定位描述，选择 1 周或 1 个月周期，系统会自动生成包含主题、方向、热点和执行难度的内容日历。</p>
+      </section>
+
+      <section class="controls">
+        <div class="control-card">
+          <form id="calendarForm">
+            <div class="field">
+              <label class="label" for="positioning">账号定位</label>
+              <textarea
+                id="positioning"
+                name="positioning"
+                class="prompt"
+                placeholder="描述您的领域、受众与风格..."
+              ></textarea>
             </div>
 
-            <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[360px]">
-              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-                <div class="text-xs text-slate-500">内容类型</div>
-                <div class="mt-2 text-2xl font-semibold" id="statTypes">4</div>
-              </div>
-              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-                <div class="text-xs text-slate-500">计划天数</div>
-                <div class="mt-2 text-2xl font-semibold" id="statDays">7</div>
-              </div>
-              <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-                <div class="text-xs text-slate-500">热点关联</div>
-                <div class="mt-2 text-2xl font-semibold">Auto</div>
-              </div>
-            </div>
-          </div>
-
-          <form id="calendarForm" class="grid gap-4 xl:grid-cols-[1.1fr_1.1fr_1.1fr_0.9fr_auto_auto]">
-            <div>
-              <label for="domain" class="mb-2 block text-sm font-medium text-slate-700">账号领域</label>
-              <input
-                id="domain"
-                name="domain"
-                type="text"
-                placeholder="例如：AI 工具、自媒体运营、精致露营"
-                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none ring-0 placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label for="audience" class="mb-2 block text-sm font-medium text-slate-700">目标受众</label>
-              <input
-                id="audience"
-                name="audience"
-                type="text"
-                placeholder="例如：副业人群、品牌主理人、城市青年"
-                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label for="style" class="mb-2 block text-sm font-medium text-slate-700">内容风格</label>
-              <input
-                id="style"
-                name="style"
-                type="text"
-                placeholder="例如：清晰专业、轻松故事感、温柔审美"
-                class="w-full rounded-2xl border border-white/70 bg-white/60 px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label for="period" class="mb-2 block text-sm font-medium text-slate-700">生成周期</label>
-              <div class="grid grid-cols-2 gap-2">
-                <label class="flex items-center justify-center rounded-2xl border border-white/70 bg-white/60 px-3 py-3 text-sm text-slate-700">
-                  <input checked name="period" type="radio" value="week" class="mr-2 accent-sky-600" />
-                  1 周
-                </label>
-                <label class="flex items-center justify-center rounded-2xl border border-white/70 bg-white/60 px-3 py-3 text-sm text-slate-700">
-                  <input name="period" type="radio" value="month" class="mr-2 accent-sky-600" />
-                  1 月
-                </label>
+            <div class="field">
+              <div class="label">计划周期</div>
+              <div class="period-switch" id="periodSwitch">
+                <button type="button" class="period-option active" data-period="week">1周</button>
+                <button type="button" class="period-option" data-period="month">1个月</button>
               </div>
             </div>
 
-            <div class="flex items-end">
-              <button
-                id="fillDemoBtn"
-                type="button"
-                class="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-3 text-sm font-medium text-white transition duration-200 hover:scale-[1.03] hover:shadow-lg"
-              >
-                示例数据
-              </button>
-            </div>
-
-            <div class="flex items-end">
-              <button
-                id="generateBtn"
-                type="submit"
-                class="w-full rounded-2xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 px-5 py-3 text-sm font-medium text-white transition duration-200 hover:scale-[1.03] hover:shadow-lg"
-              >
-                生成内容日历
-              </button>
-            </div>
+            <button type="submit" class="generate-btn">生成日历</button>
           </form>
         </div>
       </section>
 
-      <section class="mt-6">
-        <div class="glass rounded-[28px] p-5 sm:p-6">
-          <div class="flex flex-col gap-4 border-b border-white/60 pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 class="text-xl font-semibold text-slate-900">日历视图</h2>
-              <p id="calendarSummary" class="mt-1 text-sm text-slate-600">
-                先填写顶部信息，再生成一份完整的内容计划。
-              </p>
-            </div>
-
-            <div class="flex flex-wrap gap-2 text-xs">
-              <span class="rounded-full bg-emerald-100 px-3 py-1 font-medium text-emerald-700">低难度</span>
-              <span class="rounded-full bg-orange-100 px-3 py-1 font-medium text-orange-700">中难度</span>
-              <span class="rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-3 py-1 font-medium text-white">高难度</span>
-            </div>
+      <section>
+        <div class="summary">
+          <div>
+            <h2>日历视图</h2>
+            <p id="calendarSummary">输入账号定位后点击生成，查看完整内容日历。</p>
           </div>
-
-          <div class="mt-5 grid gap-4 sm:grid-cols-4">
-            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-              <div class="text-xs text-slate-500">📘 干货</div>
-              <div class="mt-2 text-2xl font-semibold" id="countDry">0</div>
-            </div>
-            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-              <div class="text-xs text-slate-500">💬 互动</div>
-              <div class="mt-2 text-2xl font-semibold" id="countInteractive">0</div>
-            </div>
-            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-              <div class="text-xs text-slate-500">📖 故事</div>
-              <div class="mt-2 text-2xl font-semibold" id="countStory">0</div>
-            </div>
-            <div class="rounded-2xl border border-white/70 bg-white/55 p-4">
-              <div class="text-xs text-slate-500">⚡ 热点</div>
-              <div class="mt-2 text-2xl font-semibold" id="countTrend">0</div>
-            </div>
+          <div class="legend">
+            <span class="pill pill-low">低难度</span>
+            <span class="pill pill-mid">中难度</span>
+            <span class="pill pill-high">高难度</span>
           </div>
-
-          <div id="calendarGrid" class="calendar-grid week mt-6"></div>
         </div>
+
+        <div id="calendarGrid" class="calendar-grid week"></div>
       </section>
     </main>
 
     <script>
-      const demoState = {
-        domain: "AI 工具与效率提升",
-        audience: "想用 AI 提升工作流的内容创作者和轻创业者",
-        style: "专业清晰但不过度严肃，强调实操感",
-        period: "week"
-      };
+      const form = document.getElementById("calendarForm");
+      const positioningInput = document.getElementById("positioning");
+      const periodSwitch = document.getElementById("periodSwitch");
+      const calendarGrid = document.getElementById("calendarGrid");
+      const calendarSummary = document.getElementById("calendarSummary");
+
+      let selectedPeriod = "week";
 
       const contentTypes = [
         { name: "干货", emoji: "📘" },
@@ -225,52 +421,51 @@
 
       const hotspots = {
         week: [
-          "周初规划热点：适合用清单、目标拆解或行动建议切入。",
-          "周中效率热点：适合分享技巧、模板和避坑经验。",
-          "评论征集热点：适合发起问题，沉淀用户真实需求。",
-          "案例复盘热点：适合展示结果、经验和转变过程。",
-          "周末轻互动热点：适合投票、问答和轻松分享。"
+          "周初规划热点：适合清单、目标拆解和行动建议。",
+          "周中效率热点：适合分享方法、模板与避坑经验。",
+          "评论征集热点：适合收集受众问题，为后续内容蓄水。",
+          "案例复盘热点：适合展示成果、经验和具体变化。",
+          "周末轻互动热点：适合投票、问答和轻量分享。"
         ],
         month: [
-          "月初规划热点：适合目标制定、路线图和计划模板。",
-          "月中复盘热点：适合诊断问题、总结阶段成果。",
-          "趋势观察热点：适合连接行业变化和用户新需求。",
-          "节点借势热点：适合结合换季、假期、节日等场景。",
-          "月末总结热点：适合复盘、收获和下月预告。"
+          "月初规划热点：适合发布目标、路线图和节奏建议。",
+          "月中复盘热点：适合问题诊断和阶段成果总结。",
+          "趋势观察热点：适合关联行业变化与用户新需求。",
+          "节点借势热点：适合结合节日、换季或平台活动。",
+          "月末总结热点：适合复盘、收获与下月预告。"
         ]
       };
 
-      const difficultyMap = {
-        低: "bg-emerald-100 text-emerald-700",
-        中: "bg-orange-100 text-orange-700",
-        高: "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white"
+      const difficultyClassMap = {
+        低: "pill pill-low",
+        中: "pill pill-mid",
+        高: "pill pill-high"
       };
-
-      const form = document.getElementById("calendarForm");
-      const fillDemoBtn = document.getElementById("fillDemoBtn");
-      const calendarGrid = document.getElementById("calendarGrid");
-      const calendarSummary = document.getElementById("calendarSummary");
-
-      function getFormState() {
-        const data = new FormData(form);
-        return {
-          domain: (data.get("domain") || "").toString().trim() || "通用内容赛道",
-          audience: (data.get("audience") || "").toString().trim() || "泛兴趣用户",
-          style: (data.get("style") || "").toString().trim() || "清晰、可信、易执行",
-          period: (data.get("period") || "week").toString()
-        };
-      }
-
-      function fillDemoData() {
-        document.getElementById("domain").value = demoState.domain;
-        document.getElementById("audience").value = demoState.audience;
-        document.getElementById("style").value = demoState.style;
-        const radio = form.querySelector(`input[name="period"][value="${demoState.period}"]`);
-        if (radio) radio.checked = true;
-      }
 
       function getTotalDays(period) {
         return period === "month" ? 30 : 7;
+      }
+
+      function parsePositioning(text) {
+        const raw = text.trim();
+        if (!raw) {
+          return {
+            domain: "通用内容赛道",
+            audience: "泛兴趣用户",
+            style: "清晰、可信、易执行"
+          };
+        }
+
+        const parts = raw
+          .split(/[，。,.\n；;、]/)
+          .map((item) => item.trim())
+          .filter(Boolean);
+
+        return {
+          domain: parts[0] || raw,
+          audience: parts[1] || "对该领域感兴趣的目标用户",
+          style: parts[2] || "专业清晰、友好克制"
+        };
       }
 
       function pickDifficulty(type, dayIndex, period) {
@@ -304,6 +499,7 @@
             `结合平台趋势变化，提醒${audience}哪些机会正在出现`
           ]
         };
+
         const choices = topicMap[type];
         return choices[index % choices.length];
       }
@@ -312,9 +508,10 @@
         const directionMap = {
           干货: `用${style}的表达方式，给出明确步骤、模板或方法，避免空泛结论。`,
           互动: `语气保持${style}，设置低门槛提问，让${audience}更愿意评论、投票或分享经验。`,
-          故事: `以${style}的叙事口吻呈现过程、转折与结果，让${domain}内容更有人味。`,
+          故事: `以${style}的叙事方式呈现过程、转折与结果，让${domain}内容更有人味。`,
           热点: `用${style}的视角快速解释热点与${domain}的关系，并指出对${audience}的实际价值。`
         };
+
         return directionMap[type];
       }
 
@@ -323,9 +520,10 @@
         return list[index % list.length];
       }
 
-      function buildPlan(state) {
-        const totalDays = getTotalDays(state.period);
+      function buildPlan(positioning, period) {
+        const totalDays = getTotalDays(period);
         const baseDate = new Date();
+        const profile = parsePositioning(positioning);
         const items = [];
 
         for (let i = 0; i < totalDays; i += 1) {
@@ -333,96 +531,87 @@
           date.setDate(baseDate.getDate() + i);
 
           const typeInfo = contentTypes[i % contentTypes.length];
-          const difficulty = pickDifficulty(typeInfo.name, i, state.period);
+          const difficulty = pickDifficulty(typeInfo.name, i, period);
 
           items.push({
             dayNumber: i + 1,
             label:
-              state.period === "month"
+              period === "month"
                 ? `${date.getMonth() + 1} 月 ${date.getDate()} 日`
                 : `${weekdayNames[date.getDay()]} · ${date.getMonth() + 1}/${date.getDate()}`,
             type: typeInfo.name,
             emoji: typeInfo.emoji,
             difficulty,
-            title: getTopicTitle(typeInfo.name, state.domain, state.audience, i),
-            direction: getDirection(typeInfo.name, state.style, state.domain, state.audience),
-            hotspot: getHotspot(state.period, i)
+            title: getTopicTitle(typeInfo.name, profile.domain, profile.audience, i),
+            direction: getDirection(typeInfo.name, profile.style, profile.domain, profile.audience),
+            hotspot: getHotspot(period, i),
+            profile
           });
         }
 
         return items;
       }
 
-      function updateStats(plan, period) {
-        document.getElementById("statDays").textContent = String(plan.length);
-        document.getElementById("statTypes").textContent = "4";
-        document.getElementById("countDry").textContent = String(plan.filter((i) => i.type === "干货").length);
-        document.getElementById("countInteractive").textContent = String(plan.filter((i) => i.type === "互动").length);
-        document.getElementById("countStory").textContent = String(plan.filter((i) => i.type === "故事").length);
-        document.getElementById("countTrend").textContent = String(plan.filter((i) => i.type === "热点").length);
-        calendarGrid.className = `calendar-grid ${period === "month" ? "month" : "week"} mt-6`;
+      function renderPlan(plan, period) {
+        const { domain, audience, style } = plan[0].profile;
+        calendarSummary.textContent = `${domain} | 面向 ${audience} | ${period === "month" ? "1个月" : "1周"}计划 | 风格：${style}`;
+        calendarGrid.className = `calendar-grid ${period}`;
+
+        calendarGrid.innerHTML = plan
+          .map(
+            (item) => `
+              <article class="day-card">
+                <div class="day-top">
+                  <div>
+                    <div class="day-number">Day ${item.dayNumber}</div>
+                    <div class="day-date">${item.label}</div>
+                  </div>
+                  <span class="${difficultyClassMap[item.difficulty]}">${item.difficulty}难度</span>
+                </div>
+
+                <div class="meta-row">
+                  <span class="type-chip">${item.emoji} ${item.type}</span>
+                  <span class="tag-chip">已关联热点</span>
+                </div>
+
+                <div class="section">
+                  <div class="section-title">发布主题</div>
+                  <p>${item.title}</p>
+                </div>
+
+                <div class="section">
+                  <div class="section-title">内容方向</div>
+                  <p>${item.direction}</p>
+                </div>
+
+                <div class="hotspot-box">
+                  <div class="section-title">通用热点切入</div>
+                  <p>${item.hotspot}</p>
+                </div>
+              </article>
+            `
+          )
+          .join("");
       }
 
-      function renderPlan(plan, state) {
-        updateStats(plan, state.period);
-        calendarSummary.textContent = `${state.domain} | 面向 ${state.audience} | ${state.period === "month" ? "1 月" : "1 周"}内容规划 | 风格：${state.style}`;
+      periodSwitch.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-period]");
+        if (!button) return;
 
-        calendarGrid.innerHTML = plan.map((item) => `
-          <article class="glass rounded-[24px] p-5">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <div class="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">Day ${item.dayNumber}</div>
-                <h3 class="mt-1 text-lg font-semibold text-slate-900">${item.label}</h3>
-              </div>
-              <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium ${difficultyMap[item.difficulty]}">
-                ${item.difficulty}难度
-              </span>
-            </div>
-
-            <div class="mt-4 flex flex-wrap gap-2">
-              <span class="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-slate-700">
-                <span>${item.emoji}</span>
-                <span>${item.type}</span>
-              </span>
-              <span class="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700">已关联热点</span>
-            </div>
-
-            <div class="mt-5">
-              <div class="text-sm font-medium text-slate-900">发布主题</div>
-              <p class="mt-2 text-sm leading-7 text-slate-700">${item.title}</p>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-sm font-medium text-slate-900">内容方向</div>
-              <p class="mt-2 text-sm leading-7 text-slate-600">${item.direction}</p>
-            </div>
-
-            <div class="mt-4 rounded-2xl border border-white/70 bg-white/50 p-4">
-              <div class="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">通用热点切入</div>
-              <p class="mt-2 text-sm leading-7 text-slate-700">${item.hotspot}</p>
-            </div>
-          </article>
-        `).join("");
-      }
-
-      function generate() {
-        const state = getFormState();
-        const plan = buildPlan(state);
-        renderPlan(plan, state);
-      }
-
-      fillDemoBtn.addEventListener("click", () => {
-        fillDemoData();
-        generate();
+        selectedPeriod = button.dataset.period;
+        periodSwitch.querySelectorAll(".period-option").forEach((item) => {
+          item.classList.toggle("active", item === button);
+        });
       });
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-        generate();
+        const plan = buildPlan(positioningInput.value, selectedPeriod);
+        renderPlan(plan, selectedPeriod);
       });
 
-      fillDemoData();
-      generate();
+      positioningInput.value = "AI 工具与效率提升，想用 AI 提升工作流的内容创作者和轻创业者，专业清晰但不过度严肃";
+      renderPlan(buildPlan(positioningInput.value, selectedPeriod), selectedPeriod);
     </script>
   </body>
 </html>
