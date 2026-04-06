@@ -181,58 +181,68 @@
         border-radius: 28px;
         min-height: 340px;
         background:
-          radial-gradient(circle at 84% 22%, rgba(255,255,255,0.75), transparent 22%),
+          radial-gradient(circle at 84% 22%, rgba(255, 255, 255, 0.75), transparent 22%),
           linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
         border: 1px solid rgba(255, 255, 255, 0.82);
       }
 
-      .petals-layer {
+      .hearts-layer {
         position: absolute;
         inset: 0;
         pointer-events: none;
       }
 
-      .petal {
+      .heart {
         position: absolute;
         width: 18px;
         height: 18px;
         opacity: 0.9;
-        animation: petalFall linear infinite;
+        transform: rotate(-45deg);
+        animation: heartFall linear infinite;
       }
 
-      .petal::before,
-      .petal::after {
+      .heart::before,
+      .heart::after {
         content: "";
         position: absolute;
+        width: 18px;
+        height: 18px;
+        background: #ffbfd5;
+        border-radius: 50%;
+      }
+
+      .heart::before {
+        top: -9px;
+        left: 0;
+      }
+
+      .heart::after {
+        top: 0;
+        left: 9px;
+      }
+
+      .heart-body {
+        position: absolute;
         inset: 0;
-        background: #ffd4e5;
-        border-radius: 12px 12px 12px 0;
+        background: #ffbfd5;
       }
 
-      .petal::before {
-        transform: rotate(45deg);
-      }
+      .heart-1 { top: -8%; left: 18%; animation-duration: 10s; animation-delay: 0s; }
+      .heart-2 { top: -12%; left: 48%; animation-duration: 12s; animation-delay: 2s; }
+      .heart-3 { top: -10%; left: 72%; animation-duration: 11s; animation-delay: 4s; }
+      .heart-4 { top: -14%; left: 30%; animation-duration: 13s; animation-delay: 1.5s; }
+      .heart-5 { top: -9%; left: 84%; animation-duration: 9.5s; animation-delay: 3.2s; }
 
-      .petal::after {
-        transform: rotate(-45deg);
-      }
-
-      .petal-1 { top: -8%; left: 18%; animation-duration: 10s; animation-delay: 0s; }
-      .petal-2 { top: -12%; left: 48%; animation-duration: 12s; animation-delay: 2s; }
-      .petal-3 { top: -10%; left: 72%; animation-duration: 11s; animation-delay: 4s; }
-      .petal-4 { top: -14%; left: 30%; animation-duration: 13s; animation-delay: 1.5s; }
-      .petal-5 { top: -9%; left: 84%; animation-duration: 9.5s; animation-delay: 3.2s; }
-
-      @keyframes petalFall {
+      @keyframes heartFall {
         0% {
-          transform: translate(0, 0) rotate(0deg);
+          transform: translate(0, 0) rotate(-45deg);
           opacity: 0;
         }
         10% {
           opacity: 0.92;
         }
         100% {
-          transform: translate(-70px, 360px) rotate(250deg);
+          transform: translate(-70px, 360px) rotate(195deg);
           opacity: 0;
         }
       }
@@ -249,15 +259,18 @@
         width: min(82%, 320px);
         display: grid;
         place-items: center;
-        gap: 10px;
+        gap: 2px;
+        transform: translateY(-8px);
       }
 
       .cat-copy {
-        font-size: 0.86rem;
-        font-weight: 500;
-        color: #7c8aa3;
-        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #6f7f98;
+        letter-spacing: 0.08em;
         text-transform: lowercase;
+        transform: translateY(-10px);
       }
 
       .cat-svg {
@@ -547,16 +560,17 @@
         </div>
 
         <div class="right-panel" id="catPanel">
-          <div class="petals-layer">
-            <span class="petal petal-1"></span>
-            <span class="petal petal-2"></span>
-            <span class="petal petal-3"></span>
-            <span class="petal petal-4"></span>
-            <span class="petal petal-5"></span>
+          <div class="hearts-layer">
+            <span class="heart heart-1"><span class="heart-body"></span></span>
+            <span class="heart heart-2"><span class="heart-body"></span></span>
+            <span class="heart heart-3"><span class="heart-body"></span></span>
+            <span class="heart heart-4"><span class="heart-body"></span></span>
+            <span class="heart heart-5"><span class="heart-body"></span></span>
           </div>
 
           <div class="cat-wrap">
             <div class="cat-stack">
+              <div class="cat-copy">find something interesting</div>
               <svg class="cat-svg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg" aria-label="line cat">
                 <g id="catFloat">
                   <animateTransform
@@ -593,7 +607,6 @@
                   <path d="M199 187L228 194" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
                 </g>
               </svg>
-              <div class="cat-copy">find something interesting</div>
             </div>
           </div>
         </div>
