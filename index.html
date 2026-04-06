@@ -7,23 +7,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poiret+One&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poiret+One&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg-a: #f0f7ff;
-        --bg-b: #ffffff;
+        --bg-start: #f0f7ff;
+        --bg-end: #ffffff;
         --text: #142033;
         --muted: #6b7280;
-        --line: #e5e7eb;
-        --line-soft: rgba(148, 163, 184, 0.18);
-        --blue: #1d4ed8;
-        --blue-deep: #1e3a8a;
-        --indigo: #4f46e5;
-        --purple: #9333ea;
-        --glass: rgba(255, 255, 255, 0.74);
-        --shadow: 0 18px 45px rgba(79, 70, 229, 0.08);
+        --line: #e8edf5;
+        --orange: #f59e0b;
+        --orange-deep: #ea580c;
+        --sky: #38bdf8;
+        --sky-deep: #0ea5e9;
+        --low: #22c55e;
+        --mid: #f59e0b;
+        --high-a: #8b5cf6;
+        --high-b: #c026d3;
       }
 
       * {
@@ -41,59 +42,62 @@
         color: var(--text);
         background:
           radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 30%),
-          linear-gradient(180deg, var(--bg-a) 0%, var(--bg-b) 100%);
+          linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
       }
 
       .page {
         width: min(90vw, 1440px);
         margin: 0 auto;
-        padding: 36px 0 64px;
+        padding: 34px 0 64px;
       }
 
       .hero {
-        margin-bottom: 20px;
         text-align: center;
+        margin-bottom: 18px;
       }
 
       .hero h1 {
         margin: 0;
         font-family: "Poiret One", sans-serif;
-        font-size: clamp(2.6rem, 5vw, 5rem);
-        line-height: 1.02;
-        letter-spacing: 0.01em;
-        font-weight: 400;
-        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+        font-size: clamp(2rem, 4vw, 3.8rem);
+        font-weight: 300;
+        line-height: 1.06;
+        letter-spacing: 0.02em;
+        color: var(--orange);
       }
 
       .hero p {
-        max-width: 820px;
-        margin: 12px auto 0;
+        margin: 10px auto 0;
+        max-width: 760px;
         color: var(--muted);
-        font-size: 1rem;
+        font-size: 0.98rem;
         line-height: 1.8;
       }
 
-      .glass-card {
-        background: var(--glass);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        box-shadow: var(--shadow);
+      .glass {
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.78);
+        box-shadow: 0 18px 45px rgba(37, 99, 235, 0.08);
       }
 
       .top-panel {
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 22px;
-        padding: 24px;
         border-radius: 30px;
-        margin-bottom: 28px;
+        padding: 24px;
+        margin-bottom: 26px;
       }
 
-      .form-panel {
+      .left-panel {
         display: grid;
         gap: 18px;
         align-content: start;
@@ -112,22 +116,21 @@
 
       .prompt {
         width: 100%;
-        min-height: 132px;
+        min-height: 136px;
         resize: vertical;
         border: 1px solid #dbeafe;
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.92);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.95);
         padding: 18px;
-        font: inherit;
         color: var(--text);
         outline: none;
-        box-shadow: 0 10px 28px rgba(59, 130, 246, 0.08);
-        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+        box-shadow: 0 10px 26px rgba(56, 189, 248, 0.08);
+        transition: border-color 180ms ease, box-shadow 180ms ease;
       }
 
       .prompt:focus {
         border-color: #93c5fd;
-        box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+        box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.12);
       }
 
       .period-wrap {
@@ -140,62 +143,77 @@
 
       .period-btn {
         border: 1px solid #dbeafe;
-        background: rgba(255, 255, 255, 0.92);
+        background: rgba(255, 255, 255, 0.95);
         color: #334155;
         border-radius: 999px;
         padding: 13px 16px;
-        font: inherit;
         font-weight: 700;
         cursor: pointer;
         transition: all 180ms ease;
       }
 
       .period-btn.active {
-        color: #1d4ed8;
+        background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
         border-color: #93c5fd;
-        background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
-        box-shadow: 0 8px 22px rgba(59, 130, 246, 0.12);
+        color: #0284c7;
+        box-shadow: 0 8px 22px rgba(14, 165, 233, 0.12);
       }
 
       .generate-btn {
         width: 100%;
         border: 0;
-        border-radius: 20px;
+        border-radius: 22px;
         padding: 18px 22px;
-        font: inherit;
         font-size: 1rem;
         font-weight: 800;
-        color: #fff;
+        color: #ffffff;
         cursor: pointer;
-        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
-        box-shadow: 0 18px 34px rgba(29, 78, 216, 0.24);
+        background: linear-gradient(135deg, var(--sky) 0%, var(--sky-deep) 100%);
+        box-shadow: 0 18px 34px rgba(14, 165, 233, 0.24);
         transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
       }
 
       .generate-btn:hover {
         transform: translateY(-1px) scale(1.015);
-        box-shadow: 0 24px 40px rgba(29, 78, 216, 0.3);
-        filter: brightness(1.03);
+        box-shadow: 0 24px 40px rgba(14, 165, 233, 0.3);
+        filter: brightness(1.02);
       }
 
-      .cat-panel {
+      .right-panel {
+        position: relative;
         display: grid;
         place-items: center;
-        min-height: 100%;
-        border-radius: 26px;
-        background:
-          radial-gradient(circle at top, rgba(255, 255, 255, 0.9), transparent 60%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.4) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.7);
         overflow: hidden;
-        position: relative;
+        border-radius: 28px;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.94), transparent 62%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.4) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.76);
       }
 
-      .cat-wrap {
-        width: min(86%, 320px);
+      .cat-box {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 18px 14px 12px;
+      }
+
+      .cat-stack {
+        width: min(86%, 330px);
         height: 80%;
         display: grid;
         place-items: center;
+        gap: 8px;
+      }
+
+      .cat-copy {
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: #64748b;
+        letter-spacing: 0.06em;
+        text-transform: lowercase;
       }
 
       .cat-svg {
@@ -220,7 +238,7 @@
 
       .calendar-head h2 {
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.16rem;
       }
 
       .calendar-head p {
@@ -242,10 +260,9 @@
         align-items: center;
         gap: 8px;
         border: 1px solid transparent;
-        background: rgba(255, 255, 255, 0.72);
+        background: rgba(255, 255, 255, 0.8);
         border-radius: 999px;
         padding: 8px 12px;
-        font: inherit;
         font-size: 0.82rem;
         font-weight: 700;
         color: #334155;
@@ -270,15 +287,15 @@
       }
 
       .dot-low {
-        background: #22c55e;
+        background: var(--low);
       }
 
       .dot-mid {
-        background: #f97316;
+        background: var(--mid);
       }
 
       .dot-high {
-        background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+        background: linear-gradient(135deg, var(--high-a) 0%, var(--high-b) 100%);
       }
 
       .calendar-grid {
@@ -288,12 +305,12 @@
       }
 
       .day-card {
-        background: #fff;
+        background: #ffffff;
         border: 1px solid var(--line);
         border-radius: 24px;
         padding: 20px;
         box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
-        transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+        transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease, border-color 180ms ease;
       }
 
       .day-card:hover {
@@ -307,8 +324,8 @@
 
       .day-card.highlight {
         opacity: 1;
-        box-shadow: 0 18px 40px rgba(79, 70, 229, 0.12);
         border-color: #c7d2fe;
+        box-shadow: 0 18px 40px rgba(79, 70, 229, 0.12);
       }
 
       .day-top {
@@ -355,7 +372,7 @@
 
       .pill-high {
         background: linear-gradient(135deg, #8b5cf6 0%, #c026d3 100%);
-        color: #fff;
+        color: #ffffff;
       }
 
       .meta-row {
@@ -436,8 +453,12 @@
           grid-template-columns: 1fr;
         }
 
-        .cat-panel {
-          min-height: 260px;
+        .right-panel {
+          min-height: 300px;
+        }
+
+        .cat-stack {
+          width: min(74%, 280px);
         }
       }
 
@@ -452,14 +473,14 @@
     </style>
   </head>
   <body>
-    <main class="page">
+    <main class="page" id="pageRoot">
       <section class="hero">
         <h1>社交媒体内容日历生成器</h1>
         <p>输入账号定位，选择 1 周或 1 个月周期，自动生成包含主题、方向、热点和执行难度的内容日历。</p>
       </section>
 
-      <section class="top-panel glass-card">
-        <div class="form-panel">
+      <section class="top-panel glass">
+        <div class="left-panel">
           <div class="field">
             <label class="label" for="positioning">账号定位</label>
             <textarea
@@ -480,73 +501,76 @@
           <button id="generateBtn" class="generate-btn" type="button">生成日历</button>
         </div>
 
-        <div class="cat-panel">
-          <div class="cat-wrap">
-            <svg class="cat-svg" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Animated cat">
-              <defs>
-                <linearGradient id="catGlow" x1="60" y1="40" x2="220" y2="240" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#C7D2FE" />
-                  <stop offset="1" stop-color="#E9D5FF" />
-                </linearGradient>
-                <filter id="softShadow" x="0" y="0" width="280" height="280" filterUnits="userSpaceOnUse">
-                  <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#A5B4FC" flood-opacity="0.25" />
-                </filter>
-              </defs>
+        <div class="right-panel">
+          <div class="cat-box">
+            <div class="cat-stack">
+              <svg class="cat-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg" aria-label="Animated healing cat">
+                <defs>
+                  <filter id="catShadow" x="-30%" y="-30%" width="160%" height="180%">
+                    <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#f59e0b" flood-opacity="0.15" />
+                  </filter>
+                </defs>
 
-              <ellipse cx="140" cy="235" rx="78" ry="18" fill="#DCEBFF" opacity="0.75">
-                <animate attributeName="rx" values="78;82;78" dur="3.4s" repeatCount="indefinite" />
-              </ellipse>
-
-              <g filter="url(#softShadow)">
-                <g>
-                  <animateTransform
-                    attributeName="transform"
-                    type="translate"
-                    values="0 0; 0 -4; 0 0"
-                    dur="3.4s"
-                    repeatCount="indefinite"
-                  />
-                  <path d="M85 105L112 56L133 107" fill="url(#catGlow)" stroke="#94A3B8" stroke-width="2.2" />
-                  <path d="M195 105L168 56L147 107" fill="url(#catGlow)" stroke="#94A3B8" stroke-width="2.2" />
-                  <path d="M70 130C70 92 101 68 140 68C179 68 210 92 210 130V155C210 197 178 225 140 225C102 225 70 197 70 155V130Z" fill="white" stroke="#CBD5E1" stroke-width="2.2" />
-                  <ellipse cx="110" cy="145" rx="12" ry="8" fill="#EEF2FF" />
-                  <ellipse cx="170" cy="145" rx="12" ry="8" fill="#EEF2FF" />
-
+                <g filter="url(#catShadow)">
                   <g>
-                    <ellipse cx="112" cy="146" rx="5.5" ry="7.5" fill="#111827">
-                      <animate attributeName="ry" values="7.5;1;7.5" dur="4.2s" repeatCount="indefinite" />
+                    <animateTransform
+                      attributeName="transform"
+                      type="translate"
+                      values="0 0; 0 -4; 0 0"
+                      dur="3.6s"
+                      repeatCount="indefinite"
+                    />
+
+                    <ellipse cx="150" cy="222" rx="76" ry="14" fill="#e6eef9">
+                      <animate attributeName="rx" values="76;80;76" dur="3.6s" repeatCount="indefinite" />
                     </ellipse>
-                    <ellipse cx="168" cy="146" rx="5.5" ry="7.5" fill="#111827">
-                      <animate attributeName="ry" values="7.5;1;7.5" dur="4.2s" repeatCount="indefinite" />
-                    </ellipse>
+
+                    <path d="M88 115L105 77L132 112" fill="#d7c0a1" stroke="#2a2a2a" stroke-width="4" stroke-linejoin="round" />
+                    <path d="M212 115L195 77L168 112" fill="#d7c0a1" stroke="#2a2a2a" stroke-width="4" stroke-linejoin="round" />
+
+                    <path
+                      d="M72 130L95 105L104 117L119 103L128 118L143 106L152 120L166 106L174 120L190 105L198 120L220 111L232 132L221 151L234 166L210 174L200 190L180 186L167 198L149 191L132 198L120 187L99 191L90 175L67 167L78 150Z"
+                      fill="#d7c0a1"
+                      stroke="#1f1f1f"
+                      stroke-width="4.5"
+                      stroke-linejoin="round"
+                    />
+
+                    <circle cx="121" cy="144" r="13.5" fill="#ffffff" />
+                    <circle cx="180" cy="144" r="13.5" fill="#ffffff" />
+                    <circle cx="121" cy="145" r="6.5" fill="#1f1f1f">
+                      <animate attributeName="ry" values="6.5;1;6.5" dur="4.8s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="180" cy="145" r="6.5" fill="#1f1f1f">
+                      <animate attributeName="ry" values="6.5;1;6.5" dur="4.8s" repeatCount="indefinite" />
+                    </circle>
+
+                    <path d="M150 152C145 150 142 154 142 158C142 161 145 164 150 164C155 164 158 161 158 158C158 154 155 150 150 152Z" fill="#1f1f1f" />
+                    <path d="M145 165C147 170 153 170 156 165" stroke="#1f1f1f" stroke-width="3.5" stroke-linecap="round" />
+
+                    <path d="M104 164L73 157" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
+                    <path d="M103 173L67 173" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
+                    <path d="M103 182L74 189" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
+                    <path d="M196 164L227 157" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
+                    <path d="M197 173L233 173" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
+                    <path d="M197 182L226 189" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round" />
                   </g>
-
-                  <path d="M140 156L132 166H148L140 156Z" fill="#F9A8D4" />
-                  <path d="M129 173C132 180 138 184 140 184C142 184 148 180 151 173" stroke="#F472B6" stroke-width="2.2" stroke-linecap="round" />
-                  <path d="M102 165H76" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
-                  <path d="M103 173H72" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
-                  <path d="M178 165H204" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
-                  <path d="M177 173H208" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
-
-                  <path d="M101 212C108 193 126 181 140 181C154 181 172 193 179 212" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2.2" />
-
-                  <path d="M106 214C99 232 100 244 113 248" stroke="#CBD5E1" stroke-width="2.2" stroke-linecap="round" />
-                  <path d="M174 214C181 232 180 244 167 248" stroke="#CBD5E1" stroke-width="2.2" stroke-linecap="round" />
                 </g>
-              </g>
-            </svg>
+              </svg>
+              <div class="cat-copy">find something interesting</div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="calendar-shell glass-card">
+      <section class="calendar-shell glass" id="calendarShell">
         <div class="calendar-head">
           <div>
             <h2>日历视图</h2>
             <p id="calendarSummary">输入账号定位后点击生成，查看完整内容日历。</p>
           </div>
 
-          <div class="legend-bar">
+          <div class="legend-bar" id="legendBar">
             <button class="filter-dot" data-filter="低">
               <span class="dot dot-low"></span>
               <span>低难度</span>
@@ -573,6 +597,7 @@
       const filterButtons = Array.from(document.querySelectorAll(".filter-dot"));
       const calendarGrid = document.getElementById("calendarGrid");
       const calendarSummary = document.getElementById("calendarSummary");
+      const legendBar = document.getElementById("legendBar");
 
       let selectedPeriod = "week";
       let activeDifficultyFilter = null;
@@ -765,6 +790,7 @@
 
       function applyDifficultyFilter() {
         const cards = Array.from(calendarGrid.querySelectorAll(".day-card"));
+
         cards.forEach((card) => {
           card.classList.remove("dimmed", "highlight");
           if (!activeDifficultyFilter) return;
@@ -780,6 +806,11 @@
         });
       }
 
+      function clearFilter() {
+        activeDifficultyFilter = null;
+        applyDifficultyFilter();
+      }
+
       periodButtons.forEach((button) => {
         button.addEventListener("click", () => {
           selectedPeriod = button.dataset.period;
@@ -788,16 +819,31 @@
       });
 
       filterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const value = button.dataset.filter;
-          activeDifficultyFilter = activeDifficultyFilter === value ? null : value;
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          activeDifficultyFilter = button.dataset.filter;
           applyDifficultyFilter();
         });
+      });
+
+      legendBar.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+
+      calendarGrid.addEventListener("click", (event) => {
+        event.stopPropagation();
       });
 
       generateBtn.addEventListener("click", () => {
         const plan = buildPlan(positioningInput.value, selectedPeriod);
         renderPlan(plan, selectedPeriod);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!activeDifficultyFilter) return;
+        const clickedFilter = event.target.closest(".filter-dot");
+        if (clickedFilter) return;
+        clearFilter();
       });
 
       positioningInput.value = "AI 工具与效率提升，想用 AI 提升工作流的内容创作者和轻创业者，专业清晰但不过度严肃";
